@@ -3,6 +3,7 @@ import { useLocation, useNavigate, connect } from 'umi';
 import { Space, Divider, Image, Button, Skeleton, Empty, NoticeBar, Modal, ProgressBar, Card } from 'antd-mobile'
 import { SoundOutline, StarOutline, StarFill, AntOutline } from 'antd-mobile-icons';
 import { fisherYatesShuffle } from "@/utils/format";
+import { playAudio } from "@/utils/audio";
 import "./index.less"
 
 const QuestionType1 = forwardRef((props, ref) => {
@@ -22,16 +23,28 @@ const QuestionType1 = forwardRef((props, ref) => {
   }, []);
 
   const handleSelectWord = (item, type) => {
+    //单词选中逻辑
     const { word, index } = item;
     let bottomWordArray_ = JSON.parse(JSON.stringify(bottomWordArray));
     let topWordArray_ = JSON.parse(JSON.stringify(topWordArray));
     if(type === "bottom") {
       bottomWordArray_[index].word = '';
-      topWordArray_[index].word = word;
+      //赋值
+      const emptyWordIndex = topWordArray_.findIndex(({word}) => !word);
+      topWordArray_[emptyWordIndex].word = word;
     }else {
-      bottomWordArray_[index].word = word;
       topWordArray_[index].word = '';
+      //赋值
+      const emptyWordIndex = bottomWordArray_.findIndex(({word}) => !word);
+      bottomWordArray_[emptyWordIndex].word = word;
     }
+    //告诉父组件是否正确
+    const words = topWordArray_.map(item => item.word);
+    const isCorrect = words.join(' ') === title;
+    //告诉父组件是否完成
+    const len = topWordArray_.filter(item => !item.word);
+    const isFinish = len.length === 0;
+    props.onEvent({ isCorrect, isFinish });
     setTopWordArray(topWordArray_);
     setBottomWordArray(bottomWordArray_);
   }
@@ -83,7 +96,9 @@ const QuestionType1 = forwardRef((props, ref) => {
         justify='center'
         align="end"
         block>
-        <div className="normalPlayBtn">
+        <div
+          onClick={() => { playAudio(url, 1) }}
+          className="normalPlayBtn">
           <Image
             src='./image/sound03@2x.png'
             width={50}
@@ -91,7 +106,9 @@ const QuestionType1 = forwardRef((props, ref) => {
             fit='fill'
           />
         </div>
-        <div className="slowPlayBtn">
+        <div
+          onClick={() => {  playAudio(url, 0.5)  }}
+          className="slowPlayBtn">
           <Image
             src='./image/snail03@2x.png'
             width={30}

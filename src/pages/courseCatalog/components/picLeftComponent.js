@@ -11,7 +11,7 @@ const picLeftComponent = ({item}) => {
   let navigate = useNavigate();
   const handleDump = () => {
     navigate("/courseDetail", {
-      replace: true,
+      replace: false,
       state: {
         categoryId: id,
         categoryName: name
