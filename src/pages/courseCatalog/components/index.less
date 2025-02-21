@@ -1,0 +1,50 @@
+.sectionIndex {
+  width: 66px;
+  height: 66px;
+  border-radius: 20px;
+  background: orange;
+  line-height: 66px;
+  text-align: center;
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
+  span {
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+  }
+}
+.picLeftComponent {
+  .sectionIndex:nth-child(1) {
+
+  }
+  .sectionIndex:nth-child(2) {
+    margin-left: 40px;
+  }
+  .sectionIndex:nth-child(3) {
+    margin-left: 80px;
+  }
+  .sectionIndex:nth-child(4) {
+    margin-left: 40px;
+  }
+  .sectionIndex:nth-child(5) {
+
+  }
+}
+.picRightComponent {
+  .sectionIndex:nth-child(1) {
+    margin-left: 120px;
+  }
+  .sectionIndex:nth-child(2) {
+    margin-left: 80px;
+  }
+  .sectionIndex:nth-child(3) {
+    margin-left: 40px;
+  }
+  .sectionIndex:nth-child(4) {
+    margin-left: 80px;
+  }
+  .sectionIndex:nth-child(5) {
+    margin-left: 120px;
+  }
+}
