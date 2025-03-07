@@ -5,7 +5,7 @@ export default defineConfig({
   esbuildMinifyIIFE: true,
   title: "印尼语东仔",
   npmClient: 'pnpm',
-  outputPath: 'pormultifruit.cn',
+  outputPath: 'ptdpintar.cn',
   history: { type: 'hash' },
   hash: true,  //让 build 之后的产物包含 hash 后缀, 避免浏览器加载缓存
   mock: false, //关闭 Mock 功能
@@ -29,10 +29,11 @@ export default defineConfig({
     },
   },
   routes: [
-    { path: "/", component: "login" },
-    { path: "/login", component: "login", name: "Selamat datang 欢迎" },
-    { path: "/courseCatalog", component: "courseCatalog", name: "单词类别" },
-    { path: "/courseDetail", component: "courseDetail", name: "单词列表" },
+    { path: "/", component: "home" },
+    { path: "/home", component: "home" },
+    { path: "/login", component: "login", name: "登录东东通行证" },
+    { path: "/courseCatalog", component: "courseCatalog", name: "阶段列表" },
+    { path: "/courseDetail", component: "courseDetail", name: "关卡列表" },
     { path: "/setting", component: "setting", name: "设置" },
   ],
   alias: {},

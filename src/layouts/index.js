@@ -33,17 +33,8 @@ const Layout = (props) => {
           <></>
       }
       <div className="outletContent">
-        {/*<Image className="bgImage" src='./image/img_background.png'/>*/}
+        <Image className="bgImage" src='./image/img_background.png'/>
         <Outlet/>
-        { (name && name !== "Selamat datang 欢迎") ?
-          <WaterMark
-            content={props.waterMarkContent}
-            gapX={12}
-            gapY={24}
-            fullPage={false}
-          /> :
-          <></>
-        }
       </div>
     </div>
   );

@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useLocation, useNavigate, connect } from 'umi';
-import { Space, Collapse, Switch, Button, Image, Empty, NoticeBar, Modal, ProgressBar, Card } from 'antd-mobile'
+import { Space, Collapse, Switch, Button, Image, Dialog, NoticeBar, Modal, ProgressBar, Card } from 'antd-mobile'
 import { SoundOutline, StarOutline, StarFill, AntOutline } from 'antd-mobile-icons';
 import { request } from '@/services';
+import { playAudio } from "@/utils/audio";
 import "./index.less"
 import QuestionType1 from './components/questionType1';
 import QuestionType2 from './components/questionType2';
@@ -59,28 +60,119 @@ const courseDetail = () => {
   }
 
   //俺不会
+  const [correct, setCorrect] = React.useState([]);
   const handleUnknown = () => {
+    const len = subjectList.length;
+    if(index === len - 1) {
+      playAudio('./audio/fail.mp3', 1)
+      Dialog.alert({
+        content: (
+          <div style={{
+            background: '#f45856',
+            borderRadius: '10px',
+            paddingBottom: '20px',
+          }}>
+            <Image
+              src='./image/failResult.png'
+              width={300}
+              height={402}
+              fit='fill'
+            />
+          </div>
+        ),
+        onConfirm: () => {
+          navigate("/courseCatalog", { replace: true });
+        },
+      })
+      return
+    }
     setIndex(index => index + 1);
   }
 
   //我做完了
   const handleSubmit = () => {
-    if(isFinish) setComplete(true)
+    if(!isFinish) return;
+    if(isCorrect) {
+      playAudio('./audio/success-answer.mp3', 1);
+      setComplete(true);
+      setIsCorrect(true);
+    }else {
+      playAudio('./audio/wrong-answer.mp3', 1);
+      setComplete(true);
+      setIsCorrect(false);
+    }
   }
 
   //继续
   const handleContinue = () => {
+    const len = subjectList.length;
+    if(index === len - 1) {
+      //判断最终是否成功
+
+
+
+
+      const isTrue = '222';
+      if(isTrue) {
+        playAudio('./audio/success.mp3', 1)
+        Dialog.alert({
+          content: (
+            <div style={{
+              background: '#329dfb',
+              borderRadius: '10px',
+              paddingBottom: '20px',
+            }}>
+              <Image
+                src='./image/successResult.png'
+                width={300}
+                height={402}
+                fit='fill'
+              />
+            </div>
+          ),
+          onConfirm: () => {
+            navigate("/courseCatalog", { replace: true });
+          },
+        })
+        return
+      }else {
+        playAudio('./audio/fail.mp3', 1)
+        Dialog.alert({
+          content: (
+            <div style={{
+              background: '#f45856',
+              borderRadius: '10px',
+              paddingBottom: '20px',
+            }}>
+              <Image
+                src='./image/failResult.png'
+                width={300}
+                height={402}
+                fit='fill'
+              />
+            </div>
+          ),
+          onConfirm: () => {
+            navigate("/courseCatalog", { replace: true });
+          },
+        })
+        return
+      }
+    }
+
     setIndex(index => index + 1);
+    setIsFinish(false)
+    setComplete(false);
+    setIsCorrect(false);
   }
 
   //知道了
   const handleKnown = () => {
-
+    navigate("/courseCatalog", { replace: true });
   }
 
   return (
     <div className='courseDetail'>
-
       <div className='courseDetailContain'>
         <ProgressBar
           style={{'--track-width': '24px'}}
@@ -89,7 +181,6 @@ const courseDetail = () => {
         />
         {subjectList.length ? subjectRenderTpl() : ''}
       </div>
-
       {
         !isComplete ? (
           <div className='operateBtnArea'>

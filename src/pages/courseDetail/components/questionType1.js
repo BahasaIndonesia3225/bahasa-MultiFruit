@@ -4,6 +4,7 @@ import { Space, Divider, Image, Button, Skeleton, Empty, NoticeBar, Modal, Progr
 import { SoundOutline, StarOutline, StarFill, AntOutline } from 'antd-mobile-icons';
 import { fisherYatesShuffle } from "@/utils/format";
 import { playAudio } from "@/utils/audio";
+import GradientText from '@/components/GradientText'
 import "./index.less"
 
 const QuestionType1 = forwardRef((props, ref) => {
@@ -51,7 +52,14 @@ const QuestionType1 = forwardRef((props, ref) => {
 
   return (
     <div className="QuestionType1">
-      <p className="title">输入你听到的内容</p>
+      <GradientText
+        colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+        animationSpeed={20}
+        showBorder={false}
+        className="title"
+      >
+        输入你听到的内容
+      </GradientText>
       <Space direction="vertical" block>
         <Space wrap>
           {

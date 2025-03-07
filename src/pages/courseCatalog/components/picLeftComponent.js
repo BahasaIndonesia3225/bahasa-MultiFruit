@@ -1,15 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react'
 import {useNavigate, connect } from 'umi';
-import {Image, List, SearchBar, Skeleton, Empty, FloatingBubble, Card, Space, Grid } from 'antd-mobile';
+import {Image, Card, Space, Grid, Dialog } from 'antd-mobile';
+import { LockOutline, UnlockOutline } from 'antd-mobile-icons'
 import { request } from '@/services';
 import "./index.less"
 
 const picLeftComponent = ({item}) => {
-  const {id, name, introduce, pic, children} = item;
+  const {id, name, introduce, pic, children, colour, flag} = item;
 
-  //登陆成功提示模态框
   let navigate = useNavigate();
-  const handleDump = () => {
+  const handleDump = async (data) => {
+    const {id, name, flag} = data;
+    if(flag === 0) {
+      await Dialog.alert({
+        content: '请先完成前面的关卡',
+      })
+      return
+    }
     navigate("/courseDetail", {
       replace: false,
       state: {
@@ -39,13 +46,18 @@ const picLeftComponent = ({item}) => {
           </Grid.Item>
           <Grid.Item>
             {
-              children.map((item, index) => (
-                <div
-                  className="sectionIndex"
-                  onClick={() => handleDump()}>
-                  <span>{index + 1}</span>
-                </div>
-              ))
+              children.map((item, index) => {
+                const { id, name, flag } = item;
+                return (
+                  <div
+                    key={id}
+                    className="sectionIndex"
+                    style={{ backgroundImage: flag === 0 ? `url(./image/defaultBtnBg.png)` : `url(./image/${colour}BtnBg.png)` }}
+                    onClick={() => handleDump(item)}>
+                    <span>{index + 1}</span>
+                  </div>
+                )
+              })
             }
           </Grid.Item>
         </Grid>

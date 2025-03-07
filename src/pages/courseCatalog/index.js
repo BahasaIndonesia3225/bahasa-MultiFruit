@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import {useNavigate, connect } from 'umi';
-import {Image, List, SearchBar, Skeleton, Empty, FloatingBubble, Badge, Space, Toast } from 'antd-mobile';
+import {FloatingBubble, Dialog, Space, Toast } from 'antd-mobile';
+import { UndoOutline } from 'antd-mobile-icons'
 import PicLeftComponent from "@/pages/courseCatalog/components/picLeftComponent";
 import PicRightComponent from "@/pages/courseCatalog/components/picRightComponent";
 import { request } from '@/services';
@@ -46,19 +47,29 @@ const courseCatalog = (props) => {
 
   //重置进度
   const handleReset = async () => {
-    const stage = stageList[0].stage;
-    const node = stageList[0].children[0].stage;
-    await request.post('/prod-api/stageApi/add', { data: { stage, node } })
-    Toast.show({
-      icon: 'success',
-      content: '重置进度成功',
+    const result = await Dialog.confirm({
+      title: '确认重置进度？',
+      content: '重置进度后将从第一阶段开始玩！',
     })
-    getStageListMethod();
+    if (result) {
+      const stage = stageList[0].stage;
+      const node = stageList[0].children[0].stage;
+      await request.post('/prod-api/stageApi/add', { data: { stage, node } })
+      Toast.show({
+        icon: 'success',
+        content: '重置进度成功',
+      })
+      getStageListMethod();
+    }
   }
 
   return (
     <div className='courseCatalog'>
-      <Space direction='vertical' block style={{ '--gap': '16px' }}>
+      <Space
+        style={{ '--gap': '16px' }}
+        direction='vertical'
+        block
+      >
         {
           stageList.map((pItem, pIndex) => {
             const {id} = pItem;
@@ -69,6 +80,16 @@ const courseCatalog = (props) => {
             }
           })
         }
+        <FloatingBubble
+          style={{
+            '--initial-position-bottom': '24px',
+            '--initial-position-right': '24px',
+            '--edge-distance': '24px',
+          }}
+          onClick={() => handleReset()}
+        >
+          <UndoOutline fontSize={32} />
+        </FloatingBubble>
       </Space>
     </div>
   )
